@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "To be added",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/app.ts",
     "start": "node dist/app.js",
@@ -24,9 +25,11 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.6",
     "@types/express-session": "^1.19.0",
-    "@types/node": "^25.6.0",
+    "@types/node": "^25.6.2",
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
+    "@types/pg": "^8.20.0",
+    "prisma": "^7.8.0",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3"
   },
@@ -40,7 +43,6 @@
     "express-session": "^1.19.0",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "pg": "^8.20.0",
-    "prisma": "^7.8.0"
+    "pg": "^8.20.0"
   }
 }
