@@ -11,41 +11,47 @@ model User {
   email String @unique
   password String
   name String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   sessions Session[]
   folders Folder[]
   files File[]
 }
 
-model Session{
-  id Int @id
+model Session {
+  id String @id @default(uuid())
   sid String @unique
   data String
   expiresAt DateTime
 
   userId Int?
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Folder{
+model Folder {
   id Int @id @default(autoincrement())
   name String
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   files File[]
 }
 
-model File{
+model File {
   id Int @id @default(autoincrement())
   name String
+  url String
+  size Int
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   userId Int
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   folderId Int?
-  folder Folder? @relation(fields: [folderId], references: [id])
+  folder Folder? @relation(fields: [folderId], references: [id], onDelete: Cascade)
 }
