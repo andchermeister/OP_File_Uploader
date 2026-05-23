@@ -1,4 +1,7 @@
 import express from "express";
+import session from "express-session";
+import { PrismaSessionStore } from "@quixo3/prisma-session-store";
+import { prisma } from "./lib/prisma";
 import authRouter from "./routes/authRoutes";
 import dotenv from "dotenv";
 import "./config/passport";
@@ -10,6 +13,23 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "super-secret-key-change-this-in-env",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+    },
+    store: new PrismaSessionStore(prisma, {
+      checkPeriod: 2 * 60 * 1000,
+      dbRecordIdIsSessionId: true,
+    }),
+  }),
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
