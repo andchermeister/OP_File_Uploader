@@ -1,23 +1,29 @@
-import path from "node:path";
 import express from "express";
-import session from "express-session";
-import passport from "passport";
+import authRouter from "./routes/authRoutes";
 import dotenv from "dotenv";
-import mainRouter from "./routes/mainRouter";
-import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
+import "./config/passport";
+import passport from "./config/passport";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const app = express();
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/", mainRouter);
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/auth", authRouter);
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Welcome to the File Uploader",
+    version: "1.0.0",
+    environment: process.env.NODE_ENV || "development",
+  });
+});
 
 app.listen(PORT, (error?: Error) => {
   if (error) {
