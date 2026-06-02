@@ -25,10 +25,10 @@ export const registerSchema = z.object({
 });
 
 export const loginSchema = z.object({
-  email: z
-    .string({ message: "Email is required" })
+  username: z
+    .string({ message: "Username or email is required" })
     .trim()
-    .min(1, { message: "Email is required" }),
+    .min(1, { message: "Username or email is required" }),
 
   password: z.string().min(1, { message: "Password is required" }),
 });

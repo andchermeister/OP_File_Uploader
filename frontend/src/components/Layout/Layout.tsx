@@ -3,12 +3,21 @@ import Topbar from "./Topbar/Topbar";
 import { Outlet } from "react-router-dom";
 import "./Layout.css";
 
-export default function Layout() {
+interface LayoutProps {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+  onSignout: () => void;
+}
+
+export default function Layout({ user, onSignout }: LayoutProps) {
   return (
     <div className="app-layout-container">
       <Sidebar />
       <div className="main-content-container">
-        <Topbar />
+        <Topbar user={user} onSignout={onSignout} />
         <div className="page-container">
           <Outlet />
         </div>

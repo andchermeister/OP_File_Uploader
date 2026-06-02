@@ -2,7 +2,13 @@ import HomeFilledIcon from "@mui/icons-material/HomeFilled";
 import FolderIcon from "@mui/icons-material/Folder";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
-export const SidebarData = [
+export type SidebarItem = {
+  title: string;
+  icon: React.ReactNode;
+  link: string;
+};
+
+export const SidebarData: SidebarItem[] = [
   {
     title: "Home",
     icon: <HomeFilledIcon />,

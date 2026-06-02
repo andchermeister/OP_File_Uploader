@@ -3,31 +3,29 @@ import { Link } from "react-router-dom";
 import "./Auth.css";
 
 export default function Signin() {
-  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.SubmitEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch("http://localhost:3000/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ username, password }),
         credentials: "include",
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        alert("Logged in successfully!");
+        alert("Signed in successfully!");
+        window.location.href = "/home";
       } else {
         setError(data.message || "Authentication failed");
       }
@@ -56,8 +54,8 @@ export default function Signin() {
           <input
             type="text"
             name="username"
-            value={formData.username}
-            onChange={handleChange}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             placeholder="Username or email"
             className="auth-input"
             required
@@ -67,18 +65,16 @@ export default function Signin() {
           <input
             type="password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             className="auth-input"
             required
           />
         </div>
-        <Link to="/home">
-          <button type="submit" disabled={loading} className="auth-btn">
-            {loading ? "Logging in..." : "Sign in"}
-          </button>
-        </Link>
+        <button type="submit" disabled={loading} className="auth-btn">
+          {loading ? "Logging in..." : "Sign in"}
+        </button>
       </form>
     </div>
   );

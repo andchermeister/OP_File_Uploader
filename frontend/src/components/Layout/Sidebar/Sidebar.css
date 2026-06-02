@@ -14,17 +14,14 @@
   font-size: 20px;
 }
 
-#sidebar-logo-img {
-  flex: 20%;
-}
-
-#sidebar-logo-text {
+.sidebar-logo-text {
   flex: 80%;
 }
 
-#sidebar-logo-img {
+.sidebar-logo-img {
   width: 50px;
   height: 50px;
+  flex: 20%;
 }
 
 .sidebar-button {
@@ -83,16 +80,16 @@
   background-color: #e8e7eb;
 }
 
-.sidebar-list #active {
+.sidebar-list .active {
   background-color: #c1e7ff;
   color: #004a77;
 }
 
-#sidebar-icon {
+.sidebar-icon {
   flex: 20%;
   padding-left: 10px;
 }
 
-#sidebar-title {
+.sidebar-title {
   flex: 80%;
 }

@@ -7,28 +7,31 @@ export default function Sidebar() {
   return (
     <div className="sidebar-container">
       <div className="sidebar-logo-container">
-        <img src={StratosLogo} alt="Stratos logo" id="sidebar-logo-img" />
-        <span id="sidebar-logo-text">Stratos</span>
+        <img
+          src={StratosLogo}
+          alt="Stratos logo"
+          className="sidebar-logo-img"
+        />
+        <span className="sidebar-logo-text">Stratos</span>
       </div>
       <button className="sidebar-button">
-        <span id="sidebar-button-icon">
+        <span className="sidebar-button-icon">
           <AddIcon />
         </span>
-        <span id="sidebar-button-text">New</span>
+        <span className="sidebar-button-text">New</span>
       </button>
       <ul className="sidebar-list">
-        {SidebarData.map((val, key) => {
+        {SidebarData.map((val) => {
           return (
             <li
-              key={key}
-              className="sidebar-row"
-              id={window.location.pathname == val.link ? "active" : ""}
+              key={val.link}
+              className={`sidebar-row ${window.location.pathname === val.link ? "active" : ""}`}
               onClick={() => {
                 window.location.pathname = val.link;
               }}
             >
-              <div id="sidebar-icon">{val.icon}</div>{" "}
-              <div id="sidebar-title">{val.title}</div>{" "}
+              <div className="sidebar-icon">{val.icon}</div>{" "}
+              <div className="sidebar-title">{val.title}</div>{" "}
             </li>
           );
         })}

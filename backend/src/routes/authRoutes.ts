@@ -58,7 +58,7 @@ authRouter.post(
 );
 
 authRouter.post(
-  "/login",
+  "/signin",
   validate(loginSchema),
   (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate("local", (err: any, user: any, info: any) => {
@@ -77,7 +77,7 @@ authRouter.post(
 
         res.status(200).json({
           status: "success",
-          message: "Logged in successfully!",
+          message: "Signed in successfully!",
           user: {
             id: user.id,
             name: user.name,
@@ -86,6 +86,44 @@ authRouter.post(
         });
       });
     })(req, res, next);
+  },
+);
+
+authRouter.get("/me", (req: Request, res: Response) => {
+  if (req.isAuthenticated() && req.user) {
+    res.status(200).json({
+      status: "success",
+      user: {
+        id: (req.user as any).id,
+        name: (req.user as any).name,
+        email: (req.user as any).email,
+      },
+    });
+  } else {
+    res.status(401).json({
+      status: "fail",
+      message: "Not authenticated",
+    });
+  }
+});
+
+authRouter.post(
+  "/signout",
+  (req: Request, res: Response, next: NextFunction) => {
+    req.logout((err) => {
+      if (err) return next(err);
+
+      req.session.destroy((sessionErr) => {
+        if (sessionErr) return next(sessionErr);
+
+        res.clearCookie("connect.sid", { path: "/" });
+
+        res.status(200).json({
+          status: "success",
+          message: "Signed out successfully!",
+        });
+      });
+    });
   },
 );
 
