@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Landing from "./pages/Landing/Landing";
@@ -17,17 +17,6 @@ interface User {
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/auth/me", { credentials: "include" })
-      .then((res) => (res.ok ? res.json() : Promise.reject()))
-      .then((data) => setUser(data.user))
-      .catch(() => setUser(null))
-      .finally(() => setLoading(false));
-  }, []);
-
-  if (loading) return <div>Loading Stratos Cloud...</div>;
   return (
     <div className="app-layout-container">
       <BrowserRouter>

@@ -3,6 +3,8 @@ import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "./lib/prisma";
 import authRouter from "./routes/authRoutes";
+import fileRouter from "./routes/fileRoute";
+import folderRouter from "./routes/foulderRoute";
 import dotenv from "dotenv";
 import "./config/passport";
 import passport from "./config/passport";
@@ -44,6 +46,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRouter);
+app.use("/files", fileRouter);
+app.use("/folders", folderRouter);
 
 app.get("/", (req, res) => {
   res.status(200).json({
