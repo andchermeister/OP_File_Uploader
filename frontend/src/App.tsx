@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Landing from "./pages/Landing/Landing";
@@ -17,6 +17,42 @@ interface User {
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/auth/me", {
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user || data);
+        }
+      } catch (err) {
+        console.error("Failed to check session:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkSession();
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div className="app-layout-container">
       <BrowserRouter>
@@ -24,7 +60,9 @@ export default function App() {
           <Route path="/" element={<Landing />} />
           <Route
             path="/signin"
-            element={!user ? <Signin /> : <Navigate to="/home" />}
+            element={
+              !user ? <Signin setUser={setUser} /> : <Navigate to="/home" />
+            }
           />
           <Route path="/signup" element={<Signup />} />
           <Route

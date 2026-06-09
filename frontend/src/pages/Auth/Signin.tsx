@@ -1,12 +1,23 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Auth.css";
 
-export default function Signin() {
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+interface SigninProps {
+  setUser: (user: User) => void;
+}
+
+export default function Signin({ setUser }: SigninProps) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,7 +36,8 @@ export default function Signin() {
 
       if (response.ok) {
         alert("Signed in successfully!");
-        window.location.href = "/home";
+        setUser(data.user || data);
+        navigate("/home");
       } else {
         setError(data.message || "Authentication failed");
       }

@@ -45,12 +45,42 @@
   gap: 10px;
 }
 
-.sidebar-button:hover {
+.sidebar-button:hover,
+.drop-down-item:hover {
   background-color: #edf3fa;
   transition: 0.3s;
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.1),
     0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.drop-down-wrapper {
+  position: relative;
+  width: 100px;
+}
+
+.drop-down {
+  display: none;
+  width: 200px;
+  height: 100px;
+  background-color: white;
+  position: absolute;
+  left: 0;
+  top: 0px;
+  bottom: 0px;
+  z-index: 0;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.1),
+    0 1.5px 4px rgba(0, 0, 0, 0.3);
+}
+
+.drop-down.open {
+  display: block;
+}
+
+.drop-down-item {
+  cursor: pointer;
+  color: black;
 }
 
 .sidebar-list {
