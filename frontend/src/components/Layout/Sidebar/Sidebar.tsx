@@ -1,5 +1,6 @@
 import "./Sidebar.css";
 import { SidebarData } from "./SidebarData";
+import FolderModal from "./FolderModal";
 import AddIcon from "@mui/icons-material/Add";
 import StratosLogo from "../../../assets/stratos-logo-small.png";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -10,6 +11,7 @@ export default function Sidebar() {
   const location = useLocation();
   const [isDropdown, setIsDropdown] = useState(false);
   const dropDownRef = useRef<HTMLDivElement>(null);
+  const [isModal, setIsModal] = useState(false);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -27,6 +29,24 @@ export default function Sidebar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleCreateFolderSubmit = async (name: string) => {
+    try {
+      const response = await fetch("http://localhost:3000/folders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        console.log("Folder commited to database successfully!");
+        setIsModal(false);
+      }
+    } catch (error) {
+      console.error("Failed to create the folder:", error);
+    }
+  };
 
   return (
     <div className="sidebar-container">
@@ -52,7 +72,10 @@ export default function Sidebar() {
         <div className={`drop-down ${isDropdown ? "open" : ""}`}>
           <div
             className="drop-down-item"
-            onClick={() => setIsDropdown(!isDropdown)}
+            onClick={() => {
+              setIsDropdown(!isDropdown);
+              setIsModal(true);
+            }}
           >
             New folder
           </div>
@@ -81,6 +104,13 @@ export default function Sidebar() {
           );
         })}
       </ul>
+
+      {isModal && (
+        <FolderModal
+          onClose={() => setIsModal(false)}
+          onSubmit={handleCreateFolderSubmit}
+        />
+      )}
     </div>
   );
 }

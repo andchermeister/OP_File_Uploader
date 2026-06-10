@@ -72,6 +72,7 @@
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.1),
     0 1.5px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 15px;
 }
 
 .drop-down.open {
@@ -79,8 +80,13 @@
 }
 
 .drop-down-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: black;
+  border-radius: 15px;
+  height: 50px;
 }
 
 .sidebar-list {
@@ -122,4 +128,43 @@
 
 .sidebar-title {
   flex: 80%;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 15px;
+  width: 400px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.1),
+    0 1.5px 4px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-input {
+  width: 100%;
+  border: 1px solid black;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
