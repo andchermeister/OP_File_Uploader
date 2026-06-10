@@ -21,7 +21,7 @@ export default function FolderModal({ onClose, onSubmit }: FolderModalProps) {
         onClick={(e) => e.stopPropagation()}
         onSubmit={handleSubmit}
       >
-        <h3>Create new folder</h3>
+        <h3 className="modal-title">New folder</h3>
 
         <input
           type="text"
@@ -33,13 +33,14 @@ export default function FolderModal({ onClose, onSubmit }: FolderModalProps) {
         />
 
         <div className="modal-actions">
-          <button type="button" onClick={onClose} className="cancel-btn">
+          <button type="button" onClick={onClose} className="modal-cancel-btn">
             Cancel
           </button>
+
           <button
             type="submit"
             disabled={!folderName.trim()}
-            className="submit-btn"
+            className="modal-submit-btn"
           >
             Create
           </button>

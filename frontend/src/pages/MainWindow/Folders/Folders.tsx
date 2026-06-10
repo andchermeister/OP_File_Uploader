@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../MainWindow.css";
 import "./Folders.css";
+import FolderIcon from "@mui/icons-material/Folder";
 
 interface Folder {
   id: number;
@@ -43,6 +44,9 @@ export default function Folders() {
     };
 
     fetchFolders();
+
+    window.addEventListener("folderCreated", fetchFolders);
+    return () => window.removeEventListener("folderCreated", fetchFolders);
   }, []);
 
   return (
@@ -56,7 +60,8 @@ export default function Folders() {
         {Array.isArray(folders) &&
           folders.map((folder) => (
             <li key={folder.id} className="folder-item">
-              {folder.name}
+              <FolderIcon className="folder-icon" sx={{ fontSize: 120 }} />
+              <span className="folder-name">{folder.name}</span>
             </li>
           ))}
       </ul>

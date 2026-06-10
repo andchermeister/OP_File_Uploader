@@ -42,6 +42,7 @@ export default function Sidebar() {
       if (response.ok) {
         console.log("Folder commited to database successfully!");
         setIsModal(false);
+        window.dispatchEvent(new Event("folderCreated"));
       }
     } catch (error) {
       console.error("Failed to create the folder:", error);

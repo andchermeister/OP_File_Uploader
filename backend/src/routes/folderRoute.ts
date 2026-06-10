@@ -42,7 +42,7 @@ folderRouter.get(
 
       const userFolders = await prisma.folder.findMany({
         where: { userId: currentUserId },
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: "asc" },
       });
 
       res.status(200).json({
