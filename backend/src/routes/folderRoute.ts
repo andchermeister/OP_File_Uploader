@@ -55,6 +55,40 @@ folderRouter.get(
   },
 );
 
+folderRouter.get(
+  "/:id",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const currentUserId = (req.user as any).id;
+
+      const folder = await prisma.folder.findUnique({
+        where: { id: Number(id) },
+        include: {
+          files: {
+            orderBy: { createdAt: "desc" },
+          },
+        },
+      });
+
+      if (!folder || folder.userId !== currentUserId) {
+        res.status(404).json({
+          status: "fail",
+          message: "Folder not found or user is unauthorised.",
+        });
+        return;
+      }
+
+      res.status(200).json({
+        status: "success",
+        data: folder,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
 folderRouter.put(
   "/:id",
   async (req: Request, res: Response, next: NextFunction) => {
