@@ -30,7 +30,7 @@ export default function Files() {
         if (Array.isArray(data)) {
           setFiles(data);
         } else {
-          setFiles(data.folders || data.data || []);
+          setFiles([]);
         }
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -54,7 +54,7 @@ export default function Files() {
       <h1>Files page</h1>
 
       {isLoading && <p>Loading files...</p>}
-      {error && <p className="error-message">{error}</p>}
+      {error && <p>{error}</p>}
 
       <ul className="files-list">
         {Array.isArray(files) &&

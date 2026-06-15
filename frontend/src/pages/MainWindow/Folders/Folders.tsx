@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "../MainWindow.css";
 import "./Folders.css";
+import { useNavigate } from "react-router-dom";
 import FolderIcon from "@mui/icons-material/Folder";
 
 interface Folder {
@@ -12,6 +13,7 @@ export default function Folders() {
   const [folders, setFolders] = useState<Folder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -49,6 +51,10 @@ export default function Folders() {
     return () => window.removeEventListener("folderCreated", fetchFolders);
   }, []);
 
+  const handleFolderClick = (id: number) => {
+    navigate(`/folders/${id}`);
+  };
+
   return (
     <div className="main-window-container">
       <h1>Folders page</h1>
@@ -59,7 +65,11 @@ export default function Folders() {
       <ul className="folders-list">
         {Array.isArray(folders) &&
           folders.map((folder) => (
-            <li key={folder.id} className="folder-item">
+            <li
+              key={folder.id}
+              className="folder-item"
+              onClick={() => handleFolderClick(folder.id)}
+            >
               <FolderIcon className="folder-icon" sx={{ fontSize: 120 }} />
               <span className="folder-name">{folder.name}</span>
             </li>

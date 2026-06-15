@@ -8,6 +8,7 @@ import Signup from "./pages/Auth/Signup";
 import Home from "./pages/MainWindow/Home/Home";
 import Files from "./pages/MainWindow/Files/Files";
 import Folders from "./pages/MainWindow/Folders/Folders";
+import Folder from "./pages/MainWindow/Folders/Folder";
 
 interface User {
   id: string;
@@ -80,6 +81,7 @@ export default function App() {
             />
             <Route path="/files" element={<Files />} />
             <Route path="/folders" element={<Folders />} />
+            <Route path="/folders/:folderId" element={<Folder />} />
           </Route>
         </Routes>
       </BrowserRouter>
