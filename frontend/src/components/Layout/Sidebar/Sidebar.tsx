@@ -12,6 +12,7 @@ export default function Sidebar() {
   const [isDropdown, setIsDropdown] = useState(false);
   const dropDownRef = useRef<HTMLDivElement>(null);
   const [isModal, setIsModal] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -49,6 +50,13 @@ export default function Sidebar() {
     }
   };
 
+  const handleAddFileClick = () => {
+    setIsDropdown(!isDropdown);
+    if (fileInputRef.current) {
+      fileInputRef.current?.click();
+    }
+  };
+
   return (
     <div className="sidebar-container">
       <div className="sidebar-logo-container">
@@ -80,10 +88,7 @@ export default function Sidebar() {
           >
             New folder
           </div>
-          <div
-            className="drop-down-item"
-            onClick={() => setIsDropdown(!isDropdown)}
-          >
+          <div className="drop-down-item" onClick={handleAddFileClick}>
             Add file
           </div>
         </div>
@@ -105,6 +110,8 @@ export default function Sidebar() {
           );
         })}
       </ul>
+
+      <input type="file" ref={fileInputRef} style={{ display: "none" }} />
 
       {isModal && (
         <FolderModal
