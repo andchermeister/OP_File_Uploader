@@ -24,11 +24,11 @@ export default function Files() {
           throw new Error("Failed to fetch files");
         }
 
-        const data = await response.json();
-        console.log("Fetched data:", data);
+        const payload = await response.json();
+        console.log("Fetched data:", payload);
 
-        if (Array.isArray(data)) {
-          setFiles(data);
+        if (payload && Array.isArray(payload.data)) {
+          setFiles(payload.data);
         } else {
           setFiles([]);
         }
