@@ -3,7 +3,7 @@ import { SidebarData } from "./SidebarData";
 import FolderModal from "./FolderModal";
 import AddIcon from "@mui/icons-material/Add";
 import StratosLogo from "../../../assets/stratos-logo-small.png";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 
 export default function Sidebar() {
@@ -13,6 +13,7 @@ export default function Sidebar() {
   const dropDownRef = useRef<HTMLDivElement>(null);
   const [isModal, setIsModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { folderId } = useParams<{ folderId: string }>();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -64,6 +65,10 @@ export default function Sidebar() {
     }
     const data = new FormData();
     data.append("file", file);
+    if (folderId) {
+      console.log("Current extracted folderId parameter from URL:", folderId);
+      data.append("folderId", folderId);
+    }
 
     try {
       const response = await fetch("http://localhost:3000/files/upload", {
@@ -74,6 +79,7 @@ export default function Sidebar() {
 
       if (response.ok) {
         console.log("File uploaded succesfully");
+        window.dispatchEvent(new Event("fileInFolderCreated"));
       } else {
         const contentType = response.headers.get("content-type");
         if (contentType && contentType.includes("application/json")) {

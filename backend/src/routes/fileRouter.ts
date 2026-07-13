@@ -19,7 +19,7 @@ fileRouter.post(
       }
 
       const currentUserId = (req.user as any).id;
-      const folderId = req.body;
+      const { folderId } = req.body;
 
       let parsedFolderId: number | null = null;
 

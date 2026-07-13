@@ -55,6 +55,10 @@ export default function Folder() {
     };
 
     fetchFolderFiles();
+
+    window.addEventListener("fileInFolderCreated", fetchFolderFiles);
+    return () =>
+      window.removeEventListener("fileInFolderCreated", fetchFolderFiles);
   }, [folderId]);
 
   if (isLoading) {
