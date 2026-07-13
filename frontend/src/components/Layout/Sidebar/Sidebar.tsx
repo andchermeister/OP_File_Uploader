@@ -57,6 +57,42 @@ export default function Sidebar() {
     }
   };
 
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    const data = new FormData();
+    data.append("file", file);
+
+    try {
+      const response = await fetch("http://localhost:3000/files/upload", {
+        method: "POST",
+        body: data,
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        console.log("File uploaded succesfully");
+      } else {
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await response.json();
+          console.error("File upload failed", errorData);
+        } else {
+          const errorText = await response.text();
+          console.error("File upload failed", errorText);
+        }
+      }
+    } catch (error) {
+      console.log("An error occured during file upload", error);
+    } finally {
+      if (e.target) {
+        e.target.value = "";
+      }
+    }
+  };
+
   return (
     <div className="sidebar-container">
       <div className="sidebar-logo-container">
@@ -111,7 +147,12 @@ export default function Sidebar() {
         })}
       </ul>
 
-      <input type="file" ref={fileInputRef} style={{ display: "none" }} />
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileSelect}
+        style={{ display: "none" }}
+      />
 
       {isModal && (
         <FolderModal

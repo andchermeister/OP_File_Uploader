@@ -1,24 +1,44 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { prisma } from "../lib/prisma";
 import { isAuthenticated } from "../middleware/authGuard";
+import { upload } from "../middleware/uploadEngine";
 
 const fileRouter = Router();
 fileRouter.use(isAuthenticated);
 
 fileRouter.post(
-  "/",
+  "/upload",
+  upload.single("file"),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, url, size, folderId } = req.body;
+      if (!req.file) {
+        res
+          .status(400)
+          .json({ status: "fail", message: "No file asset provided." });
+        return;
+      }
+
       const currentUserId = (req.user as any).id;
+      const folderId = req.body;
+
+      let parsedFolderId: number | null = null;
+
+      if (
+        folderId &&
+        typeof folderId === "string" &&
+        folderId !== "undefined" &&
+        folderId !== "[object Object]"
+      ) {
+        parsedFolderId = Number(folderId);
+      }
 
       const newFile = await prisma.file.create({
         data: {
-          name,
-          url,
-          size,
+          name: req.file.originalname,
+          url: req.file.path,
+          size: req.file.size,
           userId: currentUserId,
-          folderId: folderId ? Number(folderId) : null,
+          folderId: parsedFolderId,
         },
       });
 
