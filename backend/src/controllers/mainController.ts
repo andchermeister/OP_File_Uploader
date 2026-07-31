@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
+// import { Request, Response } from "express";
 
-export async function renderIndex(req: Request, res: Response) {
-  res.render("index");
-}
+// export async function renderIndex(req: Request, res: Response) {
+//   res.render("index");
+// }

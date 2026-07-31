@@ -1,0 +1,117 @@
+import { Request, Response, NextFunction } from "express";
+import { prisma } from "../lib/prisma";
+import bcrypt from "bcryptjs";
+import passport from "passport";
+
+export const signUp = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  const { username, email, password } = req.body;
+
+  try {
+    const existingUser = await prisma.user.findFirst({
+      where: {
+        OR: [{ name: username }, { email: email }],
+      },
+    });
+
+    if (existingUser) {
+      res.status(409).json({
+        status: "fail",
+        message: "Username or email is already registered",
+      });
+      return;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = await prisma.user.create({
+      data: {
+        name: username,
+        email,
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    res.status(201).json({
+      status: "success",
+      message: "User registered succesfully!",
+      data: newUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const signIn = (req: Request, res: Response, next: NextFunction) => {
+  passport.authenticate("local", (err: any, user: any, info: any) => {
+    if (err) return next(err);
+
+    if (!user) {
+      res.status(401).json({
+        status: "fail",
+        message: info?.message || "Invalid authentication credentials.",
+      });
+      return;
+    }
+
+    req.logIn(user, (loginErr) => {
+      if (loginErr) return next(loginErr);
+
+      res.status(200).json({
+        status: "success",
+        message: "Signed in succesfully!",
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+      });
+    });
+  })(req, res, next);
+};
+
+export const verifyUser = (req: Request, res: Response) => {
+  if (req.isAuthenticated() && req.user) {
+    res.status(200).json({
+      status: "success",
+      user: {
+        id: (req.user as any).id,
+        name: (req.user as any).name,
+        email: (req.user as any).email,
+      },
+    });
+  } else {
+    res.status(401).json({
+      status: "fail",
+      message: "Not authenticated",
+    });
+  }
+};
+
+export const signOut = (req: Request, res: Response, next: NextFunction) => {
+  req.logout((err) => {
+    if (err) return next(err);
+
+    req.session.destroy((sessionErr) => {
+      if (sessionErr) return next(sessionErr);
+
+      res.clearCookie("connect.sid", { path: "/" });
+
+      res.status(200).json({
+        status: "success",
+        message: "Signed out successfully!",
+      });
+    });
+  });
+};
