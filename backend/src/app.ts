@@ -2,7 +2,7 @@ import express from "express";
 import session from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "./lib/prisma";
-import authRouter from "./routes/authRoutes";
+import authRouter from "./routes/authRouter";
 import fileRouter from "./routes/fileRouter";
 import folderRouter from "./routes/folderRouter";
 import dotenv from "dotenv";
