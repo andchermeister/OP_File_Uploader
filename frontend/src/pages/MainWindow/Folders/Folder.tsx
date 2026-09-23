@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import "../MainWindow.css";
 import "../Files/Files.css";
 import "./Folder.css";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
-import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import ClearIcon from "@mui/icons-material/Clear";
 
 interface File {
   id: number;
@@ -18,7 +16,6 @@ export default function Folder() {
   const [error, setError] = useState<string | null>(null);
   const [folderName, setFolderName] = useState("");
   const { folderId } = useParams<{ folderId: string }>();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFolderFiles = async () => {
@@ -69,45 +66,9 @@ export default function Folder() {
     return <p>{error}</p>;
   }
 
-  const handleDeleteFolder = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this folder",
-    );
-    if (!confirmDelete) {
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `http://localhost:3000/folders/${folderId}`,
-        {
-          method: "DELETE",
-          credentials: "include",
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to delete the folder");
-      }
-
-      navigate("/folders");
-    } catch (err: unknown) {
-      console.error(err);
-      alert("Could not delete the folder. Please try again");
-    }
-  };
-
   return (
     <div className="main-window-container">
-      <h1>Folder page</h1>
-      <div className="folder-page-header">
-        <span>Stratos homepage</span>
-        <KeyboardArrowRightIcon className="breadcrump-separator" />
-        <span className="folder-name">{folderName}</span>
-        <button onClick={() => handleDeleteFolder()}>
-          <ClearIcon />
-        </button>
-      </div>
+      <h1 className="folder-name">{folderName}</h1>
       <ul className="files-list">
         {Array.isArray(files) &&
           files.map((file) => {

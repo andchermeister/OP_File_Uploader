@@ -20,3 +20,34 @@
   color: #c1e7ff;
   cursor: pointer;
 }
+
+.contextual-action-toolbar {
+  display: flex;
+  align-items: center;
+  background-color: #e9eef6;
+  border-radius: 25px;
+  gap: 25px;
+  padding: 8px 8px;
+}
+
+.contextual-action-toolbar.is-visible {
+  visibility: visible;
+}
+
+.contextual-action-toolbar.is-hidden {
+  visibility: hidden;
+}
+
+.tool-btn {
+  border: none;
+}
+
+.tool-btn:hover {
+  background-color: #d8dde3;
+  border-radius: 25px;
+}
+
+.selection-count {
+  display: inline-block;
+  transform: translateY(-5px);
+}

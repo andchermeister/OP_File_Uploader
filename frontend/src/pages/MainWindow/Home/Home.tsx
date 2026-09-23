@@ -1,13 +1,3 @@
-/* 
-
-  Task for today:
-  Finish copying the style of drive
-  Fix the alignements for css grid/flex choose the best out of two options.
-  Fix topbar spacetaking
-
-
-*/
-
 import "../MainWindow.css";
 import "./Home.css";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
