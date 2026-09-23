@@ -1,0 +1,154 @@
+import { Router, Request, Response, NextFunction } from "express";
+import { prisma } from "../lib/prisma";
+import { isAuthenticated } from "../middleware/authGuard";
+
+export const createFolder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { name } = req.body;
+    const currentUserId = (req.user as any).id;
+
+    if (!name) {
+      res
+        .status(400)
+        .json({ status: "fail", message: "Folder name is required." });
+      return;
+    }
+
+    const newFolder = await prisma.folder.create({
+      data: {
+        name,
+        userId: currentUserId,
+      },
+    });
+
+    res.status(201).json({ status: "success", data: newFolder });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getFolders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const currentUserId = (req.user as any).id;
+    const userFolders = await prisma.folder.findMany({
+      where: { userId: currentUserId },
+      orderBy: { createdAt: "asc" },
+    });
+    res.status(200).json({
+      status: "success",
+      data: userFolders,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getFolder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.params;
+    const currentUserId = (req.user as any).id;
+
+    const folder = await prisma.folder.findUnique({
+      where: { id: Number(id) },
+      include: {
+        files: {
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    });
+
+    if (!folder || folder.userId !== currentUserId) {
+      res.status(404).json({
+        status: "fail",
+        message: "Folder not found or user is unauthorised.",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: folder,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const updateFolder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+    const currentUserId = (req.user as any).id;
+
+    const folder = await prisma.folder.findUnique({
+      where: { id: Number(id) },
+    });
+    if (!folder || folder.userId !== currentUserId) {
+      res.status(404).json({
+        status: "fail",
+        message: "Folder not found or user is unauthorised.",
+      });
+      return;
+    }
+
+    const updatedFolder = await prisma.folder.update({
+      where: { id: Number(id) },
+      data: { name },
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: updatedFolder,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const deleteFolder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { id } = req.params;
+    const currentUserId = (req.user as any).id;
+
+    const folder = await prisma.folder.findUnique({
+      where: { id: Number(id) },
+    });
+
+    if (!folder || folder.userId !== currentUserId) {
+      res.status(404).json({
+        status: "fail",
+        message: "Folder not found or user is unauthorised.",
+      });
+      return;
+    }
+
+    await prisma.folder.delete({
+      where: { id: Number(id) },
+    });
+
+    res.status(200).json({
+      status: "success",
+      message: "Folder deleted successfully.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
