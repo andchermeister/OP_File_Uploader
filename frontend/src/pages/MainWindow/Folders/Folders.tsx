@@ -20,6 +20,9 @@ export default function Folders() {
   const [isVisible, setVisible] = useState(false);
   const [folderName, setFolderName] = useState("");
   const [folderId, setFolderId] = useState(0);
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [newFolderName, setNewFolderName] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,6 +71,41 @@ export default function Folders() {
     navigate(`/folders/${id}`);
   };
 
+  const handleFolderRename = async (
+    folderId: number,
+    newFolderName: string,
+  ) => {
+    const trimmed = newFolderName.trim();
+    if (!trimmed) {
+      setIsRenaming(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/folders/${folderId}`,
+        {
+          credentials: "include",
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: trimmed }),
+        },
+      );
+
+      if (!response.ok) {
+        console.error("Failed to rename the folder: ", response.statusText);
+        return;
+      }
+
+      setFolderName(trimmed);
+      setIsRenaming(false);
+      window.dispatchEvent(new Event("folderCreated"));
+    } catch (error: unknown) {
+      alert("Could not rename the folder");
+      console.error("Could not rename the folder:", error);
+    }
+  };
+
   const handleFolderDelete = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this folder?",
@@ -114,11 +152,35 @@ export default function Folders() {
           <button className="tool-btn" onClick={() => setVisible(!isVisible)}>
             <CloseIcon />
           </button>
-          <span className="selection-count">{folderName} selected</span>
+          {isRenaming ? (
+            <input
+              className="rename-input"
+              autoFocus
+              value={newFolderName}
+              onChange={(e) => setNewFolderName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleFolderRename(folderId, newFolderName);
+                } else if (e.key === "Escape") {
+                  setIsRenaming(false);
+                }
+              }}
+              onBlur={() => handleFolderRename(folderId, newFolderName)}
+            />
+          ) : (
+            <span className="selection-count">{folderName} selected</span>
+          )}
+
           <button className="tool-btn">
             <DownloadIcon />
           </button>
-          <button className="tool-btn">
+          <button
+            className="tool-btn"
+            onClick={() => {
+              setNewFolderName(folderName);
+              setIsRenaming(true);
+            }}
+          >
             <DriveFileRenameOutlineIcon />
           </button>
           <button className="tool-btn" onClick={() => handleFolderDelete()}>

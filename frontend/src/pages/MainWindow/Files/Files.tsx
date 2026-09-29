@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import "../MainWindow.css";
 import "./Files.css";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+// import CloseIcon from "@mui/icons-material/Close";
+// import DownloadIcon from "@mui/icons-material/Download";
+// import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+// import DeleteIcon from "@mui/icons-material/Delete";
 
 interface File {
   id: number;
@@ -12,6 +16,11 @@ export default function Files() {
   const [files, setFiles] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // const [isVisible, setVisible] = useState(false);
+  // const [fileNmae, setFileName] = useState("");
+  // const [newFileName, setNewFileName] = useState("");
+  // const [fileId, setFileId] = useState(0);
+  // const [isRenaming, setIsRenaming] = useState(false);
 
   useEffect(() => {
     const fetchFiles = async () => {
