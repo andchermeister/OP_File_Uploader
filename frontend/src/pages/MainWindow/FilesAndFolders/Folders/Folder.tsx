@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "../MainWindow.css";
+import "../../MainWindow.css";
 import "../Files/Files.css";
 import "./Folder.css";
+import "../contextualToolbar.css";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
 interface File {

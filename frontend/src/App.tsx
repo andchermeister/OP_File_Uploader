@@ -6,9 +6,9 @@ import Layout from "./components/Layout/Layout";
 import Signin from "./pages/Auth/Signin";
 import Signup from "./pages/Auth/Signup";
 import Home from "./pages/MainWindow/Home/Home";
-import Files from "./pages/MainWindow/Files/Files";
-import Folders from "./pages/MainWindow/Folders/Folders";
-import Folder from "./pages/MainWindow/Folders/Folder";
+import Files from "./pages/MainWindow/FilesAndFolders/Files/Files";
+import Folders from "./pages/MainWindow/FilesAndFolders/Folders/Folders";
+import Folder from "./pages/MainWindow/FilesAndFolders/Folders/Folder";
 
 interface User {
   id: string;

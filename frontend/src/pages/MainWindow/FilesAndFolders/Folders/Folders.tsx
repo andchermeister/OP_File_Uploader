@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import "../MainWindow.css";
+import "../../MainWindow.css";
 import "./Folders.css";
+import "../contextualToolbar.css";
 import { useNavigate } from "react-router-dom";
 import FolderIcon from "@mui/icons-material/Folder";
 import CloseIcon from "@mui/icons-material/Close";
